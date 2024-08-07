@@ -1,20 +1,21 @@
-import express from "express";
 import { getAllUsers, loginUser } from "../controllers/userController.js";
+import express from "express";
 import { notAllowed } from "../utils/shareFunc.js";
+import Joi from 'joi';
+import expressJoi from 'express-joi-validation';
 
-import { Joi, validateBody } from "express-joi-validations";
-
-const router = express.Router();
+const validatior = expressJoi.createValidator({});
 
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().required()
+  password: Joi.string().min(4).max(50).required()
 });
 
+const router = express.Router();
 
 
 router.route('/').get(getAllUsers);
-router.route('/login').post(validateBody(loginSchema), loginUser).all(notAllowed);
+router.route('/login').post(validatior.body(loginSchema), loginUser).all(notAllowed);
 
 
 export default router;
