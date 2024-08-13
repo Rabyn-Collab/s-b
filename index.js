@@ -2,7 +2,8 @@ import express from "express";
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import mongoose from "mongoose";
-
+import cors from "cors";
+import morgan from "morgan";
 
 const port = 5000;
 
@@ -19,6 +20,9 @@ mongoose.connect('mongodb+srv://rabyn900:moles900@cluster0.ikwdezp.mongodb.net/S
 
 
 app.use(express.json());
+app.use(cors());
+app.use(morgan('dev'));
+
 
 
 app.get('/', (req, res) => {

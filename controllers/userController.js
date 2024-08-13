@@ -20,10 +20,12 @@ export const loginUser = async (req, res) => {
       id: isExist._id,
       isAdmin: isExist.isAdmin
     }, 'secret');
+
     return res.status(200).json({
       token,
       email: isExist.email,
-      fullname: isExist.fullname
+      fullname: isExist.fullname,
+      isAdmin: isExist.isAdmin
     })
   } catch (err) {
     return res.status(400).json({ error: `${err}` });
