@@ -20,10 +20,12 @@ const productSchema = new mongoose.Schema({
   },
   brand: {
     type: String,
+    enum: ['samsung', 'apple', 'dolce'],
     required: true
   },
   category: {
     type: String,
+    enum: ['clothes', 'tech'],
     required: true
   },
   stock: {
