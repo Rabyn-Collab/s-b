@@ -21,15 +21,15 @@ export const addProduct = async (req, res) => {
     description, stock,
     price } = req.body;
   try {
-    // await Product.create({
-    //   title,
-    //   brand,
-    //   category,
-    //   description,
-    //   image: req.imagePath,
-    //   price,
-    //   stock
-    // });
+    await Product.create({
+      title,
+      brand,
+      category,
+      description,
+      image: req.imagePath,
+      price,
+      stock
+    });
     return res.status(200).json({ message: 'product added succesfully' });
   } catch (err) {
     fs.unlink(`.${req.imagePath}`, (err) => {
