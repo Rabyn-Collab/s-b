@@ -23,6 +23,7 @@ mongoose.connect('mongodb+srv://rabyn900:moles900@cluster0.ikwdezp.mongodb.net/S
 
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static('uploads'))
 app.use(morgan('dev'));
 
 app.use(fileUpload({

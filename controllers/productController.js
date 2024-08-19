@@ -6,14 +6,24 @@ import mongoose from "mongoose";
 export const getProducts = async (req, res) => {
 
   try {
-    const products = await Product.find({});
-    return res.status(200).json({
-      products,
-    });
+    const product = await Product.find({});
+    return res.status(200).json(product);
+  } catch (err) {
+    return res.status(400).json({ message: `${err}` });
+  }
+}
+
+
+export const getProductById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const product = await Product.findById(id);
+    return res.status(200).json(product);
   } catch (er) {
     return res.status(400).json({ error: `${err}` });
   }
 }
+
 
 
 
@@ -36,7 +46,7 @@ export const addProduct = async (req, res) => {
     fs.unlink(`.${req.imagePath}`, (err) => {
       // console.log(err);
     });
-    return res.status(400).json({ error: `${err}` });
+    return res.status(400).json({ message: `${err}` });
   }
 }
 
@@ -76,7 +86,9 @@ export const updateProduct = async (req, res) => {
 
     }
 
+    if (req.imagePath) fs.unlink(`.${req.imagePath}`, (err) => {
 
+    });
     return res.status(400).json({ message: 'please provide valid id' });
 
 
@@ -85,7 +97,7 @@ export const updateProduct = async (req, res) => {
     if (req.imagePath) fs.unlink(`.${req.imagePath}`, (err) => {
 
     });
-    return res.status(400).json({ error: `${err}` });
+    return res.status(400).json({ message: `${err}` });
   }
 }
 
