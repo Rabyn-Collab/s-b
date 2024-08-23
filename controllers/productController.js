@@ -6,8 +6,9 @@ import mongoose from "mongoose";
 export const getProducts = async (req, res) => {
 
   try {
-    const product = await Product.find({});
-    return res.status(200).json(product);
+    const products = await Product.find({}).sort('-createdAt').select('-createdAt -updatedAt -__v');
+
+    return res.status(200).json(products);
   } catch (err) {
     return res.status(400).json({ message: `${err}` });
   }
@@ -17,7 +18,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).select('-createdAt -updatedAt -__v');
     return res.status(200).json(product);
   } catch (er) {
     return res.status(400).json({ error: `${err}` });
