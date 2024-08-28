@@ -6,7 +6,31 @@ import mongoose from "mongoose";
 export const getProducts = async (req, res) => {
 
   try {
-    const products = await Product.find({}).sort('-createdAt').select('-createdAt -updatedAt -__v');
+    const excludeObj = ['sort', 'page', 'search', 'fields', 'limit'];
+
+    const queryObj = { ...req.query };
+
+    excludeObj.forEach((q) => {
+      delete queryObj[q]
+    })
+
+    let query = Product.find(queryObj);
+
+
+    if (req.query.sort) {
+      const sorting = req.query.sort.split(',').join('').trim().split(/[\s,\t,\n]+/).join(' ');
+      query = query.sort(sorting);
+    }
+
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join('').trim().split(/[\s,\t,\n]+/).join(' ');
+      query = query.select(fields);
+    }
+
+
+
+
+    const products = await query;
 
     return res.status(200).json(products);
   } catch (err) {
