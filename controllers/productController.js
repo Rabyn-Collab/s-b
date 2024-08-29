@@ -12,19 +12,26 @@ export const getProducts = async (req, res) => {
 
     excludeObj.forEach((q) => {
       delete queryObj[q]
-    })
+    });
 
-    let query = Product.find(queryObj);
+    if (req.query.search) {
+      queryObj.title = { $regex: req.query.search, $options: 'i' }
+    }
+
+    let qStr = JSON.stringify(queryObj);
+    qStr = qStr.replace(/\b(gte|gt|lte|lt|eq)\b/g, match => `$${match}`);
+
+    let query = Product.find(JSON.parse(qStr));
 
 
     if (req.query.sort) {
       const sorting = req.query.sort.split(',').join('').trim().split(/[\s,\t,\n]+/).join(' ');
-      query = query.sort(sorting);
+      query.sort(sorting);
     }
 
     if (req.query.fields) {
       const fields = req.query.fields.split(',').join('').trim().split(/[\s,\t,\n]+/).join(' ');
-      query = query.select(fields);
+      query.select(fields);
     }
 
 
