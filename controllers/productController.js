@@ -34,10 +34,13 @@ export const getProducts = async (req, res) => {
       query.select(fields);
     }
 
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
+
+    const skip = (page - 1) * limit;
 
 
-
-    const products = await query;
+    const products = await query.skip(skip).limit(limit);
 
     return res.status(200).json(products);
   } catch (err) {
