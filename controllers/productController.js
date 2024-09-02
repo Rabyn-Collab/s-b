@@ -165,4 +165,31 @@ export const removeProduct = async (req, res) => {
 
     return res.status(400).json({ error: `${err}` });
   }
+}
+
+
+
+export const addReview = async (req, res) => {
+  const { id } = req.params;
+  const { rating, comment } = req.body;
+
+  try {
+    if (mongoose.isValidObjectId(id)) {
+      const isExist = await Product.findById(id);
+      if (isExist) {
+        const review = {
+          user: req.userId,
+          name: req.user.fullname,
+          rating: Number(rating),
+          comment
+        }
+        isExist.reviews.push(review);
+        await isExist.save();
+        return res.status(200).json({ message: 'review added successfully' });
+      }
+    }
+    return res.status(400).json({ message: 'please provide valid id' });
+  } catch (err) {
+    return res.status(400).json({ error: `${err}` });
+  }
 } 

@@ -35,7 +35,24 @@ const productSchema = new mongoose.Schema({
   rating: {
     type: Number,
     default: 0
-  }
+  },
+  reviews: [
+    {
+      userId: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
+        required: true
+      },
+      comment: {
+        type: String,
+        required: true
+      },
+      rating: {
+        type: Number,
+        required: true
+      }
+    }
+  ]
 }, { timestamps: true });
 
 export const Product = mongoose.model('Product', productSchema);

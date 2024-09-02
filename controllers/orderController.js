@@ -1,5 +1,5 @@
 import { Order } from "../models/Order.js"
-
+import mongoose from "mongoose";
 
 
 
@@ -29,6 +29,25 @@ export const getOrderByUser = async (req, res) => {
       return res.status(200).json(orders);
     }
 
+
+  } catch (err) {
+    return res.status(400).json(`${err}`);
+  }
+}
+
+
+export const getOrderById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (mongoose.isValidObjectId(id)) {
+      const order = await Order.findById(id).populate('products.product').populate({
+        path: 'userId',
+        select: 'fullname email'
+      });
+      return res.status(200).json(order);
+    } else {
+      return res.status(400).json('please provide valid id');
+    }
 
   } catch (err) {
     return res.status(400).json(`${err}`);
