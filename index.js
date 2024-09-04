@@ -6,9 +6,18 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import fileUpload from "express-fileupload";
+import AdminJS from 'adminjs'
+import AdminJSExpress from '@adminjs/express'
+import { Database, Resource } from '@adminjs/mongoose'
+import { Product } from "./models/Product.js";
+import { User } from "./models/User.js";
+import { Order } from "./models/Order.js";
 
 const port = 5000;
-
+// AdminJS.registerAdapter({
+//   Database,
+//   Resource
+// });
 const app = express();
 
 
@@ -32,6 +41,42 @@ app.use(fileUpload({
   abortOnLimit: true
 }));
 
+
+// const admin = new AdminJS({
+//   resources: [
+//     {
+//       resource: Product,
+//       options: {
+//         properties: {
+//           createdAt: { isVisible: false },
+//           updatedAt: { isVisible: false },
+//         }
+//       }
+//     },
+//     {
+//       resource: User,
+//       options: {
+//         properties: {
+//           createdAt: { isVisible: false },
+//           updatedAt: { isVisible: false },
+//         }
+//       }
+//     },
+//     {
+//       resource: Order,
+//       options: {
+//         properties: {
+//           createdAt: { isVisible: false },
+//           updatedAt: { isVisible: false },
+//         }
+//       }
+//     }
+//   ]
+// })
+
+// const adminRouter = AdminJSExpress.buildRouter(admin)
+
+// app.use(admin.options.rootPath, adminRouter);
 
 
 app.get('/', (req, res) => {
