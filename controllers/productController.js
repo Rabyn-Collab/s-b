@@ -41,8 +41,12 @@ export const getProducts = async (req, res) => {
 
 
     const products = await query.skip(skip).limit(limit);
+    const length = await Product.countDocuments();
 
-    return res.status(200).json(products);
+    return res.status(200).json({
+      products,
+      length
+    });
   } catch (err) {
     return res.status(400).json({ message: `${err}` });
   }
