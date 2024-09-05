@@ -14,10 +14,11 @@ import { User } from "./models/User.js";
 import { Order } from "./models/Order.js";
 
 const port = 5000;
-// AdminJS.registerAdapter({
-//   Database,
-//   Resource
-// });
+AdminJS.registerAdapter({
+  Database,
+  Resource
+});
+
 const app = express();
 
 
@@ -42,41 +43,44 @@ app.use(fileUpload({
 }));
 
 
-// const admin = new AdminJS({
-//   resources: [
-//     {
-//       resource: Product,
-//       options: {
-//         properties: {
-//           createdAt: { isVisible: false },
-//           updatedAt: { isVisible: false },
-//         }
-//       }
-//     },
-//     {
-//       resource: User,
-//       options: {
-//         properties: {
-//           createdAt: { isVisible: false },
-//           updatedAt: { isVisible: false },
-//         }
-//       }
-//     },
-//     {
-//       resource: Order,
-//       options: {
-//         properties: {
-//           createdAt: { isVisible: false },
-//           updatedAt: { isVisible: false },
-//         }
-//       }
-//     }
-//   ]
-// })
+const admin = new AdminJS({
+  resources: [
+    {
+      resource: Product,
+      options: {
 
-// const adminRouter = AdminJSExpress.buildRouter(admin)
+        properties: {
+          reviews: { isVisible: false },
+          createdAt: { isVisible: false },
+          updatedAt: { isVisible: false },
+        },
 
-// app.use(admin.options.rootPath, adminRouter);
+      }
+    },
+    {
+      resource: User,
+      options: {
+        properties: {
+          createdAt: { isVisible: false },
+          updatedAt: { isVisible: false },
+        }
+      }
+    },
+    {
+      resource: Order,
+      options: {
+        properties: {
+          createdAt: { isVisible: false },
+          updatedAt: { isVisible: false },
+        }
+      }
+    }
+  ]
+})
+
+const adminRouter = AdminJSExpress.buildRouter(admin)
+
+app.use(admin.options.rootPath, adminRouter);
 
 
 app.get('/', (req, res) => {

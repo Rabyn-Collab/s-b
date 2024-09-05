@@ -8,7 +8,7 @@ import { adminCheck, checkUser } from "../middlewares/userCheck.js";
 const router = express.Router();
 
 
-router.route('/').get(getProducts).post(checkUser, adminCheck, validFile, addProduct).all(notAllowed);
+router.route('/').get(getProducts).post(validFile, addProduct).all(notAllowed);
 
 
 router.route('/reviews/:id').post(checkUser, addReview).all(notAllowed);
