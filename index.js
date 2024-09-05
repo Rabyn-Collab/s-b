@@ -21,15 +21,61 @@ AdminJS.registerAdapter({
 
 const app = express();
 
+const start = async () => {
 
-mongoose.connect('mongodb+srv://rabyn900:moles900@cluster0.ikwdezp.mongodb.net/ShopUs').then((val) => {
-  app.listen(port, (e) => {
-    console.log('connected');
-  });
+  // This facilitates the connection to the mongo database
+  await mongoose.connect('mongodb+srv://rabyn900:moles900@cluster0.ikwdezp.mongodb.net/ShopUs')
 
-}).catch((err) => {
-  console.log(err);
-});
+  // We will need to create an instance of AdminJS with a basic resource
+  const admin = new AdminJS({
+    resources: [
+      {
+        resource: Product,
+        options: {
+
+          properties: {
+            reviews: { isVisible: false },
+            createdAt: { isVisible: false },
+            updatedAt: { isVisible: false },
+          },
+          labels: {
+            name: 'labels.Product',
+          },
+
+        }
+      },
+      {
+        resource: User,
+        options: {
+          properties: {
+            createdAt: { isVisible: false },
+            updatedAt: { isVisible: false },
+          }
+        }
+      },
+      {
+        resource: Order,
+        options: {
+          properties: {
+            createdAt: { isVisible: false },
+            updatedAt: { isVisible: false },
+          }
+        }
+      }
+    ]
+  })
+
+  const adminRouter = AdminJSExpress.buildRouter(admin)
+
+  app.use(admin.options.rootPath, adminRouter)
+
+  app.listen(port, () => {
+    console.log(`AdminJS started on http://localhost:${port}${admin.options.rootPath}`)
+  })
+}
+
+start()
+
 
 
 app.use(express.json());
@@ -43,44 +89,8 @@ app.use(fileUpload({
 }));
 
 
-const admin = new AdminJS({
-  resources: [
-    {
-      resource: Product,
-      options: {
 
-        properties: {
-          reviews: { isVisible: false },
-          createdAt: { isVisible: false },
-          updatedAt: { isVisible: false },
-        },
 
-      }
-    },
-    {
-      resource: User,
-      options: {
-        properties: {
-          createdAt: { isVisible: false },
-          updatedAt: { isVisible: false },
-        }
-      }
-    },
-    {
-      resource: Order,
-      options: {
-        properties: {
-          createdAt: { isVisible: false },
-          updatedAt: { isVisible: false },
-        }
-      }
-    }
-  ]
-})
-
-const adminRouter = AdminJSExpress.buildRouter(admin)
-
-app.use(admin.options.rootPath, adminRouter);
 
 
 app.get('/', (req, res) => {
