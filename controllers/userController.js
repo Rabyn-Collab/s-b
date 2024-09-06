@@ -45,6 +45,12 @@ export const loginUser = async (req, res) => {
       isAdmin: isExist.isAdmin
     }, 'secret');
 
+    res.cookie('jwt', token, {
+      // secure: true,
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      httpOnly: true,
+      sameSite: 'none'
+    });
     return res.status(200).json({
       token,
       id: isExist._id,
